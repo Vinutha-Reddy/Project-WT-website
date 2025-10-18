@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WT Website — Mood Check</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<main class="container">
+<div class="theme-toggle">
+<button id="themeToggle" class="theme-btn" aria-label="Toggle theme">
+<i class="fas fa-sun sun-icon"></i>
+<i class="fas fa-moon moon-icon"></i>
+<div class="toggle-slider"></div>
+</button>
+<span class="theme-label">Dark Mode</span>
+</div>
+
+<div class="header">
+<h1>WT Website</h1>
+<p class="lead">Answer 10 quick questions and discover how many people feel exactly like you today.</p>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-container">
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+<div class="progress-text">
+<span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+</div>
+</div>
+
+<!-- Question Container -->
+<div class="form-card" id="questionContainer">
+<div class="question-group" id="currentQuestionGroup">
+<!-- Current question will be injected here -->
+</div>
+
+<div class="navigation-buttons">
+<button id="nextBtn" class="nav-btn hidden">
+<i class="fas fa-arrow-right"></i>
+Next Question
+</button>
+<button id="submitBtn" class="nav-btn hidden">
+<i class="fas fa-paper-plane"></i>
+Submit & See Results
+</button>
+</div>
+</div>
+
+<!-- Results Page -->
+<div class="results-page hidden" id="resultsPage">
+<div class="results-header">
+<h2>Your Results Are In! 🎉</h2>
+</div>
+
+<div class="similarity-circle-container">
+<div class="similarity-circle" id="similarityCircle">
+<div class="circle-content">
+<div class="percentage" id="percentageDisplay">0%</div>
+<div class="circle-label">feel like you</div>
+</div>
+</div>
+</div>
+
+<div class="results-message" id="resultsMessage">
+<!-- Personalized message will appear here -->
+</div>
+
+<div class="results-stats" id="resultsStats">
+<!-- Additional statistics will appear here -->
+</div>
+
+<button class="new-response-btn" onclick="location.reload()">
+<i class="fas fa-refresh"></i>
+Try Again
+</button>
+</div>
+
+</main>
+<script src="app.js"></script>
+</body>
+</html>
