@@ -1,20 +1,31 @@
-# WT Website (Starter)
+# WT Website
 
+Modern mood-tracking experience with a Node.js API and a Svelte-powered UI.
 
-## Backend
+## Backend (Express + JSON storage)
+
+```powershell
 cd backend
 npm install
-npm start
+npm start        # launches on http://localhost:5000
+```
 
+Data is persisted to `backend/data.json`.
 
-## Frontend
-Open frontend/index.html in a browser (or host it with any static host). The frontend expects the backend at http://localhost:4000 — change API_BASE in frontend/app.js if different.
+## Frontend (Svelte + Vite)
 
+```powershell
+cd frontend
+npm install      # installs Svelte & Vite toolchain
+npm run dev      # http://localhost:5173, proxies API calls to port 5000
+# npm run build  # optional production build in dist/
+```
 
+### Project layout
 
+- `frontend/src/App.svelte` – full survey + results flow
+- `frontend/src/questionData.js` – question/option definitions
+- `frontend/styles.css` – shared light/dark theme styling
+- `backend/index.js` – Express API with response storage & summary
 
-This is a minimal starter. From here you can:
-- Add authentication (JWT, sessions).
-- Replace JSON file with a proper DB (MongoDB or MySQL).
-- Add per-day aggregation, limit one response per user per day.
-- Add charts (Chart.js) for nicer visualizations.
+From here you can extend the project with authentication, richer analytics, or a database backend.
