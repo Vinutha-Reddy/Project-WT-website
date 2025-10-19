@@ -4,6 +4,63 @@
   import { cubicOut } from 'svelte/easing';
   import questions from './questionData.js';
 
+  const adviceBank = {
+    energy: {
+      'High Energy': "You're buzzing with high energy - channel it toward meaningful tasks and celebrate progress.",
+      'Medium Energy': 'Steady energy is perfect for consistent progress - remember to pace yourself.',
+      'Low Energy': 'Energy feels low today; choose gentle wins and give yourself permission to recharge.',
+      Exhausted: 'Exhaustion is a clear sign to slow down - prioritize rest, water, and nourishment.'
+    },
+    stress: {
+      'No Stress': "Stress is low - lean into that calm confidence to glide through today's plans.",
+      'Mild Stress': 'Mild stress is present; sprinkle in short breaks and breathing exercises to stay centered.',
+      'Moderate Stress': 'Moderate stress calls for mindful pauses - delegate or slow down where you can.',
+      'High Stress': 'High stress means you deserve extra care - ground yourself and reach out for support if needed.'
+    },
+    productivity: {
+      'Very Productive': "Productivity is soaring - capture what's working so you can repeat it tomorrow.",
+      Productive: 'A productive rhythm is flowing - keep chipping away at meaningful goals.',
+      Average: 'An average productivity day still counts - consistent effort moves you forward.',
+      Unproductive: 'When productivity dips, focus on one tiny step and be kind to yourself as you reset.'
+    },
+    sleep: {
+      'Excellent Sleep': "Great sleep sets you up beautifully - let that rested mind guide today's choices.",
+      'Good Sleep': 'Solid rest supports steady progress - maintain the habits that helped you rest well.',
+      'Poor Sleep': 'Poor sleep can cloud everything - work in micro rests and gentler pacing.',
+      'No Sleep': 'Running on no sleep is tough - prioritize recovery and lean on supports where possible.'
+    },
+    social: {
+      'Very Social': "You've connected deeply today - enjoy the uplift and share that warmth forward.",
+    'Somewhat Social': "Balanced social time gives flexibility - reach out again if you'd like another boost.",
+    'Alone by Choice': 'Choosing solitude can be restorative - soak in the quiet and do what nourishes you.',
+      Lonely: 'Feeling lonely is hard - consider contacting someone you trust or a community that feels safe.'
+    },
+    health: {
+      Excellent: 'Your body feels excellent - celebrate with movement or nourishment you enjoy.',
+      Good: 'Good health supports steady progress - keep honoring the habits that got you here.',
+      Fair: 'Fair health deserves gentle care - listen closely to what your body asks for today.',
+      Poor: 'When health feels poor, tiny restorative actions and medical support can make a difference.'
+    },
+    motivation: {
+      'Highly Motivated': 'Motivation is high - set bold yet realistic targets and take the first step now.',
+      Motivated: "You're motivated - line up your next task and ride that momentum.",
+      Neutral: 'Neutral motivation benefits from structure - plan small, doable actions to spark momentum.',
+      Unmotivated: 'When motivation dips, reconnect with your "why" and start with the smallest action possible.'
+    },
+    focus: {
+      'Very Focused': 'Sharp focus is on your side - protect it by minimizing distractions.',
+      Focused: "You're focused - keep tasks prioritized and you'll see meaningful progress.",
+      Distracted: 'Feeling distracted happens - try time blocking or jotting thoughts to regain clarity.',
+      Unfocused: 'When focus fades, give yourself grace and reset with a short break.'
+    },
+    overall: {
+      'Amazing Day': "It's an amazing day overall - savor the wins and capture a highlight.",
+      'Good Day': "A good day is unfolding - note what's working so you can repeat it.",
+      'Okay Day': 'An okay day still holds bright spots - find one thing to appreciate right now.',
+      'Bad Day': 'Tough days happen - treat yourself gently and remember that tomorrow offers a reset.'
+    }
+  };
+
   const API_BASE = 'http://localhost:5000/api';
 
   let theme = 'dark';
@@ -149,8 +206,8 @@
       message = "You're the very first person to share your feelings today! Your courage to be vulnerable paves the way for others to connect and share their experiences.";
     }
 
-    const insight = getMoodInsight(userResponses.mood);
-    return { title, message, insight };
+    const insights = composeInsights(userResponses);
+    return { title, message, insights };
   }
 
   function getMoodInsight(mood) {
@@ -164,6 +221,44 @@
     };
 
     return insights[mood] || 'Every feeling is valid and part of the human experience.';
+  }
+
+  function composeInsights(userResponses) {
+    const lines = [];
+    const moodInsight = getMoodInsight(userResponses.mood);
+    if (moodInsight) {
+      lines.push(moodInsight);
+    }
+
+    const orderedKeys = [
+      'energy',
+      'stress',
+      'productivity',
+      'sleep',
+      'social',
+      'health',
+      'motivation',
+      'focus',
+      'overall'
+    ];
+
+    orderedKeys.forEach((key) => {
+      const selected = userResponses[key];
+      const advice = adviceBank[key]?.[selected];
+      if (advice) {
+        lines.push(advice);
+      }
+    });
+
+    if (userResponses.note) {
+      lines.push(`You noted: "${userResponses.note}" - honor that reflection today.`);
+    }
+
+    if (!lines.length) {
+      lines.push('Every feeling is valid and part of the human experience.');
+    }
+
+    return lines;
   }
 
   function getNotificationIcon(type) {
@@ -268,7 +363,11 @@
         <div class="circle-label">feel like you</div>
         <div class="similarity-text">{messageInfo?.message}</div>
         <div class="similarity-message">
-          <p>{messageInfo?.insight}</p>
+          {#if messageInfo?.insights?.length}
+            {#each messageInfo.insights as insight}
+              <p>{insight}</p>
+            {/each}
+          {/if}
         </div>
       </div>
 
