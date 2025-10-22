@@ -1,1 +1,0 @@
-{"name":"wt-backend","version":"1.0.0","description":"WT Website backend - simple Express API storing responses in a JSON file","main":"index.js","scripts":{"start":"node index.js"},"dependencies":{"cors":"^2.8.5","express":"^4.21.2","nodemon":"^2.0.22"},"keywords":[],"author":"","license":"ISC"}
